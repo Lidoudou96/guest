@@ -56,4 +56,4 @@ def guest_manage(request):
         # 如果page不是整数，取第一页的数据
     except EmptyPage:
         contacts = paginator.page(paginator.num_pages)
-    return render(request,"guest_manage.html",{"user":username,"guests":guest_list})
+    return render(request,"guest_manage.html",{"user":username,"guests":contacts})
