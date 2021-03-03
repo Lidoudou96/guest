@@ -45,7 +45,7 @@ def search_name(request):
 def guest_manage(request):
     # username = request.COOKIES.get('user','')#读取浏览器cookie
     username = request.session.get('user', '')  # 读取浏览器session
-    guest_list =Guest.objects.all()
+    guest_list =Guest.objects.all().order_by('id')
     paginator = Paginator(guest_list,2)
     page = request.GET.get('page')
     try:
