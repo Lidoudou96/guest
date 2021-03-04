@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/guest/guest" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guest" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6.4 (D:\Python\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6.4 (C:\Program Files (x86)\python3.6.4\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">

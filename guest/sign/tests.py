@@ -42,19 +42,19 @@ class LoginActionTest(TestCase):
     def test_login_action_username_password_null(self):
         #用户名密码为空
         test_data ={'username': '','password':''}
-        response = self.client.post('/login_action',data=test_data)
+        response = self.client.post('/login_action/',data=test_data)
         self.assertEqual(response.status_code,200)
         self.assertIn(b"username or password error!",response.content)
 
     def test_login_action_username_password_error(self):
         #用户名密码错误
         test_data = {'username':'adb','password':'123'}
-        response = self.client.post('/login_action', data=test_data)
+        response = self.client.post('/login_action/', data=test_data)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"username or password error!", response.content)
 
     def test_login_action_success(self):
         #登陆成功
         test_data = {'username':'admin','password':'admin123456'}
-        response = self.client.post('/login_action', data=test_data)
+        response = self.client.post('/login_action/', data=test_data)
         self.assertEqual(response.status_code, 302)
