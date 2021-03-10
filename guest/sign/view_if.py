@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from sign.models import Event
-from django.conf.exception import ValidationError
+from django.core.exceptions import ValidationError
 
 #添加发布会接口
 def add_event(request):
