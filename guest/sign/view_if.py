@@ -1,6 +1,8 @@
 from django.http import JsonResponse
-from sign.models import Event
+from sign.models import Event,Guest
 from django.core.exceptions import ValidationError,ObjectDoesNotExist
+from django.db.utils import IntegrityError
+import time
 
 #添加发布会接口
 def add_event(request):
@@ -68,3 +70,23 @@ def get_event_list(request):
             return JsonResponse({'status':200,'messag':'success','data':datas})
         else:
             return JsonResponse({'status': 10022, 'message': 'query result is empty'})
+
+#添加嘉宾接口
+def add_guest(request):
+    eid = request.POST.get('eid','')
+    realname = request.POST.get('realname','')
+    phone = request.POST.get('phone','')
+    email = request.POST.get('email','')
+
+    if eid =='' or realname == '' or phone == '':
+        return JsonResponse({'status':10021,'message':'parameter error'})
+
+    result = Event.objects.filter(id=eid)
+    if not result:
+        return JsonResponse({'status': 10022, 'message': 'event id null'})
+
+    result = Event.objects.get(id=eid).status
+    if not result:
+        return JsonResponse({'status': 10023, 'message': 'event status is not available'})
+
+
