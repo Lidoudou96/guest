@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from sign.models import Event
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError,ObjectDoesNotExist
 
 #添加发布会接口
 def add_event(request):
@@ -30,3 +30,41 @@ def add_event(request):
     except ValidationError as e:
         error ='start_time format error. It must be in YYYY-MM-DD HH:MM:SS format.'
         return JsonResponse({'status':200,'message':'add event success'})
+
+#查询发布会接口a
+def get_event_list(request):
+    eid = request.GET.get("eid","")  #发布会id
+    name = request.GET.get("name","")
+
+    if eid == '' and name == '':
+        return JsonResponse({'status':10021,'message':'parameter error'})
+
+    if eid != '':
+        event = {}
+        try:
+            result = Event.objects.get(id=eid)
+        except ObjectDoesNotExist:
+            return JsonResponse({'status':10022,'message':'query result is empty'})
+        else:
+            event['name'] = result.name
+            event['limit'] = result.limit
+            event['status'] = result.status
+            event['address'] = result.address
+            event['start_time'] = result.start_time
+            return JsonResponse({'status':200,'messag':'success','data':event})
+
+    if name != '':
+        datas = []
+        results = Event.objects.filter(name_contains=name)
+        if results:
+            for r in results:
+                event = {}
+                event['name'] = r.name
+                event['limit'] = r.limit
+                event['status'] = r.status
+                event['address'] = r.address
+                event['start_time'] = r.start_time
+                datas.append(event)
+            return JsonResponse({'status':200,'messag':'success','data':datas})
+        else:
+            return JsonResponse({'status': 10022, 'message': 'query result is empty'})
