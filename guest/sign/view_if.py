@@ -89,4 +89,27 @@ def add_guest(request):
     if not result:
         return JsonResponse({'status': 10023, 'message': 'event status is not available'})
 
+    event_limit = Event.objects.get(id=eid).limit  #发布会限制人数
+    guest_limit = Guest.objects.filter(event_id=eid)  # 发布会已添加的嘉宾数
 
+    if len(guest_limit) >= event_limit:
+        return JsonResponse({'status': 10024, 'message': 'event number is full'})
+
+    event_time = Event.objects.get(id=eid).start_time  # 发布会时间
+    etime = str(event_time).split(".")[0]
+    timeArray = time.strptime(etime,"%Y-%m-%d %H:%M:%S")
+    e_time = int(time.mktime(timeArray))
+
+    now_time = str(time.time()) #当前时间
+    ntime = now_time.split(".")[0]
+    n_time = int(ntime)
+
+    if n_time >= e_time:
+        return JsonResponse({'status': 10025, 'message': 'event has started'})
+
+    try:
+        Guest.objects.create(realname=realname,phone=int(phone),email=email,sign=0,event_id=int(eid))
+    except IntegrityError:
+        return JsonResponse({'status': 10026, 'message': 'the event guest phone number repeat'})
+
+    return JsonResponse({'status': 200, 'message': 'add guest success'})
